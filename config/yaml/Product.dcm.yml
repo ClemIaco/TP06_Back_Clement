@@ -8,9 +8,9 @@ Product:
             options:
                 unsigned: false
             id: true
-            column: id_user
+            column: idProduct
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
     fields:
         title:
             type: string
@@ -39,5 +39,5 @@ Product:
             length: 500
             options:
                 fixed: false
-            column: url_image
+            column: urlImage
     lifecycleCallbacks: {  }
