@@ -9,8 +9,8 @@ class HomeController {
     
     public function home(Request $request, Response $response, array $args)
     {
-        $response->getBody()->write("Page d'accueil");
-        print_r($args);
+        $response->getBody()->write($res);
+        $res = print_r($args);
         return $response;
     }
 }
