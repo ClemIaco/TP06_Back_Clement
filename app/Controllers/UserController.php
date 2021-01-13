@@ -32,7 +32,7 @@ class UserController {
 
         $response = TokenController::createJwt($response);
 
-        $user = array('success' => true, 'login' => $customer->getLogin());
+        $user = array('id' => $customer->getIdCustomer(), 'login' => $customer->getLogin(), 'success' => true);
         $response->getBody()->write(json_encode($user));
         return $response
             ->withHeader("Content-Type", "application/json")
@@ -68,6 +68,8 @@ class UserController {
         if (!preg_match("/[a-zA-Z0-9]{1,256}/",$login)) return $response->withStatus(400);
         if (!preg_match("/[a-zA-Z0-9]{1,256}/",$password)) return $response->withStatus(400);
 
+        $entityManager->getConnection()->beginTransaction();
+
         try{
             $customer = new Customer();
             $customer->setCivility($civility);
@@ -81,6 +83,10 @@ class UserController {
             $customer->setEmail($email);
             $customer->setLogin($login);
             $customer->setPassword($password);
+
+            $entityManager->persist($customer);
+            $entityManager->flush();
+            $entityManager->getConnection()->commit();
         }
         catch (Exception $e){
             $entityManager->getConnection()->rollback();
